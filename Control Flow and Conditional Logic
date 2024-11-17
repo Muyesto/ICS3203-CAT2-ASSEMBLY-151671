@@ -1,1 +1,72 @@
+section .data
+    prompt db "Enter a number: ", 0
+    pos_msg db "The number is POSITIVE.", 10, 0
+    neg_msg db "The number is NEGATIVE.", 10, 0
+    zero_msg db "The number is ZERO.", 10, 0
+    buffer db 0 ; Space to store user input
 
+section .bss
+    num resb 4 ; Reserve 4 bytes for the number
+
+section .text
+    global _start
+
+_start:
+    ; Prompt user for input
+    mov eax, 4          ; sys_write
+    mov ebx, 1          ; stdout
+    mov ecx, prompt     ; Address of prompt
+    mov edx, 15         ; Length of prompt
+    int 0x80            ; Call kernel
+
+    ; Read user input
+    mov eax, 3          ; sys_read
+    mov ebx, 0          ; stdin
+    mov ecx, buffer     ; Address to store input
+    mov edx, 4          ; Max input length
+    int 0x80            ; Call kernel
+
+    ; Convert input to integer
+    movzx eax, byte [buffer] ; Load the ASCII value of the first character
+    sub eax, '0'        ; Convert ASCII to integer
+    mov [num], eax      ; Store the number
+
+    ; Compare the number
+    cmp eax, 0          ; Compare number with 0
+    je zero_case        ; Jump to zero_case if eax == 0
+    jl neg_case         ; Jump to neg_case if eax < 0
+
+    ; Positive case
+    jmp pos_case        ; Unconditional jump to pos_case
+
+zero_case:
+    ; Print "ZERO" message
+    mov eax, 4          ; sys_write
+    mov ebx, 1          ; stdout
+    mov ecx, zero_msg   ; Address of zero message
+    mov edx, 19         ; Length of zero message
+    int 0x80            ; Call kernel
+    jmp end_program     ; Exit program
+
+neg_case:
+    ; Print "NEGATIVE" message
+    mov eax, 4          ; sys_write
+    mov ebx, 1          ; stdout
+    mov ecx, neg_msg    ; Address of negative message
+    mov edx, 21         ; Length of negative message
+    int 0x80            ; Call kernel
+    jmp end_program     ; Exit program
+
+pos_case:
+    ; Print "POSITIVE" message
+    mov eax, 4          ; sys_write
+    mov ebx, 1          ; stdout
+    mov ecx, pos_msg    ; Address of positive message
+    mov edx, 21         ; Length of positive message
+    int 0x80            ; Call kernel
+
+end_program:
+    ; Exit program
+    mov eax, 1          ; sys_exit
+    xor ebx, ebx        ; Return code 0
+    int 0x80            ; Call kernel
