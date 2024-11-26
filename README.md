@@ -27,6 +27,13 @@ pop ebp	      - Restore the caller's base pointer.
 
 #QUESTION FOUR#
 
+The sensor value is stored in the memory location.
+The program reads this value into the AL register.
+Based on this value, the program uses conditional comparisons  and branching instructions to determine the action.
+If the water level is low, the program turns on the motor.
+If the water level is too high, the program triggers an alarm.
+If the water level is moderate, the motor is stopped.
+
 
 
 
