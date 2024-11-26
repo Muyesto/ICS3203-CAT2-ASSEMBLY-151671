@@ -13,7 +13,19 @@
 
 -I encountered a couple of challenges such as errors in addressing or lengths often resulted in incorrect outputs or crashes and ensuring that all conditions were covered without unintended fall-throughs or skipped cases.
 
+#QUESTION THREE#
+The following is a short summary of how the stack was used:
 
+push ebp	    - Save the caller's base pointer.
+mov ebp, esp  - Create a new stack frame.
+push ebx	    - Save the caller's value of ebx.
+push eax	    - Pass the argument (n-1) to recursion.
+pop ebx	      - Restore the caller's value of ebx.
+mov esp, ebp	- Restore the caller's stack pointer.
+pop ebp	      - Restore the caller's base pointer.
+
+
+#QUESTION FOUR#
 
 
 
